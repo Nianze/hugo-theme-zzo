@@ -1,12 +1,8 @@
 {{ $js := .Site.Data.lib.js }}
 {{ $css := .Site.Data.lib.css }}
 
-{{ $enquire := resources.Get "js/enquire.min.js" | resources.Fingerprint }}
-<script defer src="{{ $enquire.RelPermalink }}"></script>
 {{ $clipboard := resources.Get "js/clipboard.min.js" | resources.Fingerprint }}
 <script defer src="{{ $clipboard.RelPermalink }}"></script>
-{{ $lazysizes := resources.Get "js/lazysizes.min.js" | resources.Fingerprint }}
-<script defer src="{{ $lazysizes.RelPermalink }}"></script>
 {{ $getParents := resources.Get "js/helper/getParents.js" | resources.Minify }}
 <script defer src="{{ $getParents.RelPermalink }}"></script>
 {{ $closest := resources.Get "js/helper/closest.js" | resources.Minify }}
@@ -34,7 +30,35 @@
 {{ end }}
 
 {{ if in .Params.Libraries "mathjax" }}
-  <script defer src="{{ $js.mathjax.url }}" integrity="{{ $js.mathjax.sri }}" crossorigin="anonymous"></script>
+  <script type="text/javascript" async src="{{ $js.mathjax.url }}?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        TeX: {
+          equationNumbers: { autoNumber: "AMS" },
+          extensions: ["AMSmath.js", "AMSsymbols.js"]
+        }
+      }
+    });
+    MathJax.Hub.Queue(function () {
+      // Fix <code> tags after MathJax finishes running. This is a
+      // hack to overcome a shortcoming of Markdown. Discussion at
+      // https://github.com/mojombo/jekyll/issues/199
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+
+    MathJax.Hub.Config({
+      // Autonumbering by mathjax
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
+  </script>
 {{ end }}
 
 {{ if in .Params.Libraries "msc" }}
@@ -58,7 +82,6 @@
   <script defer src="{{ $js.viz.url }}" crossorigin="anonymous"></script>
   <script defer src="{{ $js.viz_render.url }}" integrity="{{ $js.viz_render.sri }}" crossorigin="anonymous"></script>
 {{ end }}
-
 
 <script>
   'use strict';
@@ -112,51 +135,69 @@
     {{ $enableToc := ($.Param "enableToc") }}
     {{ $toc := ($.Param "toc") }}
     {{ $hideToc := ($.Param "hideToc") }}
+    
     var enableToc = JSON.parse({{ $enableToc | jsonify }});
     var toc = JSON.parse({{ $toc | jsonify }});
     var hideToc = JSON.parse({{ $hideToc | jsonify }});
+    var tocFlexbox = document.querySelector('.toc__flexbox');
+    var tocFlexboxOuter = document.querySelector('.toc__flexbox--outer');
     
-    if (enableToc || toc) {
+    if ((enableToc || toc) && document.querySelector('.toc')) {
       var tableOfContentsElem = document.querySelector('.toc').querySelector('#TableOfContents');
-      tableOfContentsElem.querySelectorAll('ul > li').forEach(function (liElem) {
-        liElem.querySelectorAll('ul').forEach(function (ulElem) {
-          ulElem.style.display = 'none';
-        });
-      });
-
-      tableOfContentsElem.querySelectorAll('a').forEach(function(elem) {
-        elem.addEventListener('click', function() {
-          var id = elem.getAttribute('id');
-          navbar.classList.remove('navbar--show');
-          navbar.classList.remove('navbar--hide');
-          navbar.classList.add('navbar--hide');
-
-          document.querySelector('.toc').querySelectorAll('a').forEach(function(elem) {
-            elem.classList.remove('active');
+      tableOfContentsElem.querySelectorAll('ul') ?
+      tableOfContentsElem.querySelectorAll('ul').forEach(function (rootUl) {
+        rootUl.querySelectorAll('li').forEach(function (liElem) {
+          liElem.querySelectorAll('ul').forEach(function (ulElem) {
+            ulElem.style.display = 'none';
           });
-          elem.classList.add('active');
+        });
+      }) : null;
 
-          tableOfContentsElem.querySelectorAll('ul > li').forEach(function (liElem) {
-            liElem.querySelectorAll('ul').forEach(function(ulElem) {
-              ulElem.style.display = 'none';
+      if (tableOfContentsElem) {
+        if (tableOfContentsElem.querySelectorAll('a').length > 0) {
+          tableOfContentsElem.querySelectorAll('a').forEach(function (elem) {
+            elem.addEventListener('click', function () {
+              var id = elem.getAttribute('id');
+              navbar.classList.remove('navbar--show');
+              navbar.classList.remove('navbar--hide');
+              navbar.classList.add('navbar--hide');
+
+              document.querySelector('.toc').querySelectorAll('a').forEach(function (elem) {
+                elem.classList.remove('active');
+              });
+              elem.classList.add('active');
+
+              var curElem = tableOfContentsElem.querySelector('[href="#' + id + '"]');
+              if (curElem && curElem.nextElementSibling) {
+                curElem.nextElementSibling.style.display = 'block';
+              }
+              if (curElem) {
+                getParents(curElem, 'ul') ?
+                  getParents(curElem, 'ul').forEach(function (elem) {
+                    elem.style.display = 'block';
+                  }) : null;
+              }
             });
           });
-
-          var curElem = tableOfContentsElem.querySelector(`[href="#${id}"]`);
-          if (curElem && curElem.nextElementSibling) {
-            curElem.nextElementSibling.style.display = 'block';
+        } else {
+          if (tocFlexbox) {
+            tocFlexbox.setAttribute('data-position', '');
+            if (!tocFlexbox.classList.contains('hide')) {
+              tocFlexbox.classList.add('hide');
+            }
           }
-          if (curElem) {
-            getParents(curElem, 'ul') ? 
-            getParents(curElem, 'ul').forEach(function (elem) {
-              elem.style.display = 'block';
-            }) : null;
+          if (tocFlexboxOuter) {
+            tocFlexboxOuter.setAttribute('data-position', '');
+            if (!tocFlexboxOuter.classList.contains('hide')) {
+              tocFlexboxOuter.classList.add('hide');
+            }
           }
-        });
-      });
+        }
+      }
 
       // toc visibility
-      var toggleTocElem = document.querySelector("#toggle-toc");
+      var toggleTocElem = document.getElementById("toggle-toc");
+      var visibleTocElem = document.getElementById('visible-toc');
       var tocElem = document.querySelector('.toc');
       var mainElem = document.querySelector('main');
       var sideElem = document.querySelector('side');
@@ -198,6 +239,19 @@
           }
         }
       }) : null;
+
+      visibleTocElem ?
+      visibleTocElem.addEventListener('change', function(e) {
+        if (e.target.checked) {
+          if (tocElem) {
+            fadeIn(tocElem, 200);
+          }
+        } else {
+          if (tocElem) {
+            fadeOut(tocElem, 200);
+          }
+        }
+      }) : null;
     }
     // =================================================================
 
@@ -217,12 +271,11 @@
     // ==================== add links in all titles ====================
     var text, clip = new ClipboardJS('.anchor');
     var headers = singleContentsElem.querySelectorAll("h1, h2, h3, h4");
-    
+
     headers ? 
     headers.forEach(function (elem) {
       var url = encodeURI(document.location.origin + document.location.pathname);
       var link = url + "#" + elem.getAttribute('id');
-      
       var newElemOuter = document.createElement('span');
       newElemOuter.classList.add('anchor');
       newElemOuter.classList.add('hide');
@@ -273,8 +326,8 @@
     var makeClipboard = function(elem) {
       var code = elem,
         text = elem.textContent;
-
-      if (text.length > 30) {
+        
+      if (text.length > 15) {
         if (!clipInit) {
           var text, clip = new ClipboardJS('.copy-to-clipboard', {
             text: function (trigger) {
@@ -312,8 +365,8 @@
         var isNotAllowedIncluded = false;
         var curClassName = code.getAttribute('class');
 
-        for (let str of notAllowedClass) {
-          if (curClassName && curClassName.startsWith(str)) {
+        for (var i = 0; i < notAllowedClass.length; i++) {
+          if (curClassName && curClassName.startsWith(notAllowedClass[i])) {
             isNotAllowedIncluded = true;
             break;
           }
@@ -383,11 +436,14 @@
     // ============================= katex =============================
     if (lib && lib.includes('katex')) {
       var mathElements = document.getElementsByClassName('math');
-      var options = [
-        { left: "$$", right: "$$", display: true },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ];
+      var options = {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+      };
 
       renderMathInElement(document.querySelector('.single__contents'), options);
     }
@@ -421,19 +477,6 @@
 
 
     // ============================ mathjax ============================
-    if (lib && lib.includes('mathjax')) {
-      window.MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          displayMath: [['$$', '$$'], ['\\[', '\\]']],
-          processEscapes: false,
-          packages: { '[+]': ['noerrors'] }
-        },
-        loader: {
-          load: ['[tex]/noerrors']
-        },
-      };
-    }
     // =================================================================
 
 

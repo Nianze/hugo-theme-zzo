@@ -46,6 +46,9 @@ other = "조회수"
 [donate-message]
 other = "후원하기"
 
+[share-message]
+other = "공유하기"
+
 [contact-name]
 other = "이름"
 
@@ -69,3 +72,9 @@ other = "수정일"
 
 [tooltip-reading-time]
 other = "읽는 시간"
+
+[showcase-overview]
+other = "개요"
+
+[showcase-pinned]
+other = "고정"

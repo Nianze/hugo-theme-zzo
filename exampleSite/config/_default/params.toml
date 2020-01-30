@@ -6,7 +6,9 @@ custom_js = []
 useFaviconGenerator = true # https://www.favicon-generator.org/
 
 themeOptions = ["dark", "light", "hacker", "solarized", "kimbie"]
-notAllowedTypesInHome = ["contact", "talks", "about"]
+notAllowedTypesInHome = ["contact", "talks", "about", "showcase"]
+notAllowedTypesInHomeSidebar = ["about", "archive", "showcase"]
+notAllowedTypesInArchive = ["about", "talks", "showcase"]
 
 # header
 homeHeaderType = "text" # text, img, slide
@@ -29,6 +31,7 @@ talksGroupByDate = "2006"
 myname = "zzossig"
 email = "zzossig@gmail.com"
 whoami = "Web Developer"
+bioImageUrl = ""
 useGravatar = false
 location = "Seoul, Korea"
 organization = "Hugo"
@@ -40,10 +43,14 @@ enableSidebar = true
 enableSidebarTags = true
 enableSidebarSeries = true
 enableSidebarCategories = true
+enableHomeSidebarTitles = true
+enableListSidebarTitles = true
 enableToc = true
 hideToc = false
+tocPosition = "inner" # inner, outer
 enableTocSwitch = true
 itemsPerCategory = 5
+sidebarPosition = "right"
 
 # footer
 showPoweredBy = true
@@ -126,9 +133,12 @@ commento = false
   weibo = ""
   douban = ""
   csdn = ""
-  zhihu = ""
   gitlab = ""
   mastodon = ""
+  jianshu = ""
+  zhihu = ""
+  signal = ""
+  whatsapp = ""
 
 [donationOptions]
   enable = false
@@ -136,3 +146,10 @@ commento = false
   wechat = ""
   paypal = ""
   patreon = ""
+
+# possible share name: ["facebook","twitter", "reddit", "linkedin", "tumblr", "weibo", "douban", "line"]
+[[share]]
+  name = "facebook"
+  username = ""
+[[share]]
+  name = "twitter"

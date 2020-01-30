@@ -1,4 +1,4 @@
-.navbar {  
+.navbar {
   margin: auto;
   width: inherit;
   max-width: inherit;
@@ -8,7 +8,21 @@
   left: 0;
   right: 0;
   top: 0;
+
+  &[data-dir="rtl"] {
+    direction: rtl;  
+  }
   
+  &[data-dir="ltr"] {
+    direction: ltr;
+  }
+
+  @media only screen and (max-width: 769px) {
+    &[data-dir="rtl"] {
+      direction: ltr;  
+    }
+  }
+
   @include transition(all, 0.2s, ease);  
   @include flexbox();
   @include justify-content(space-between);
@@ -26,13 +40,25 @@
   }
 
   &__slide-down {
+    svg {
+      margin: auto;
+      display: block;
+    }
+
+    @include themify($themes) {
+      background-color: themed('navbar-background-color');
+      @include on-event {
+        background-color: themed('navbar-menu-hover-background-color');
+      }
+    }
+    
     @media only screen and (min-width: 769px) {
       @for $i from 1 through 8 {
         &:nth-child(#{$i}) {
           @include animation('slide-in-down .25s #{$i * .1}s 1 ease both');
         }
       }
-    }   
+    }
   }
   
   &__brand {
@@ -43,7 +69,7 @@
     @include flex-shrink(0);  
   }
 
-  &__burger {        
+  &__burger {
     display: none;
     position: relative;
 
@@ -62,7 +88,7 @@
       span {
         @include themify($themes) {
           background-color: themed('burger-menu-color');
-        }        
+        }
         
         border-radius: 1rem;
         display: block;
@@ -93,7 +119,6 @@
         }        
       }
 
-      // Modifers
       &.is-active {
         display: block;
         span {
@@ -139,7 +164,8 @@
   &__title {
     height: $grid_navbar_height;
     font-size: 1.5rem;
-    
+    font-family: $title-font;
+
     @include flexbox();
     @include align-items(center);        
     
@@ -159,6 +185,7 @@
     @include flexbox();
     @include align-items(center);
     @include justify-content(flex-end);
+
     height: $grid_navbar_height;
 
     @media only screen and (max-width: 769px) {
@@ -177,15 +204,18 @@
       @include justify-content(center);
       @include no-select;
       @include themify($themes) {
-        color: themed('navbar-title-color');        
+        color: themed('navbar-title-color');
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid themed('navbar-border-bottom-color');
+        background-color: themed('navbar-background-color');
         @include on-event {
           color: themed('navbar-title-hover-color');
           background-color: themed('navbar-menu-hover-background-color');
           text-decoration: none;
           border-bottom: 1px solid themed('navbar-border-bottom-color');
-          @media only screen and (max-width: 769px) {
-            border-bottom: none;
-          }
+        }
+        @media only screen and (max-width: 769px) {
+          border-bottom: none;
         }
         &.active {
           color: themed('navbar-title-active-color') !important;
@@ -199,19 +229,17 @@
       }
     }
 
-    &-icon {
-      margin-top: 0.4rem;
-    }
-
     &.is-active {
       position: absolute;
+      top: $grid_navbar_height;
+      left: 0;
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+
       @include flexbox();
       @include flex-direction(column);
       @include align-items(flex-start);
-      top: 100%;
-      width: 100%;
-      height: auto;      
-      overflow: hidden;
       @include themify($themes) {        
         border-top: 1px solid themed('navbar-border-bottom-color');
         background-color: themed('navbar-mobile-background-color');
@@ -267,6 +295,7 @@
       @include truncate(150px);
       @include themify($themes) {
         color: themed("dropdown-item-color");
+        background-color: themed("navbar-background-color");
         @include on-event {
           color: themed("navbar-dropdown-item-hover-color");
           background-color: themed("navbar-menu-hover-background-color");
@@ -280,7 +309,7 @@
       }
 
       @media only screen and (max-width: 769px) {
-        padding-left: 2.5rem;
+        padding: 0 2.5rem;
         min-width: 100%;
         max-width: 100%;
       }
@@ -314,7 +343,7 @@
       }      
     }
 
-    &-trigger {      
+    &-trigger {
       padding: 0.5rem;
       cursor: pointer;
       border: none;
@@ -389,7 +418,6 @@
   right: 35px * 2;
   width: 35px;
   height: $grid_navbar_height;
-  padding: 0.25rem;
   cursor: pointer;
   z-index: z('modal');
 
@@ -410,23 +438,22 @@
   }
 
   .dropdown {
-    border-bottom: 2px solid transparent;
+    height: $grid_navbar_height !important;
     @include themify($themes) {
       color: themed('burger-menu-color');  
       @include on-event {
         color: themed('link-hover');
         background-color: themed('navbar-menu-hover-background-color');
-        border-bottom: 2px solid themed('navbar-border-bottom-color');
-      }      
+      }
     }
 
     &-trigger {
-      padding: 0.5rem;
+      padding: 0.25rem;
       cursor: pointer;
       border: none;      
       outline: none;
       width: 35px;
-      height: $grid_navbar_height;
+      height: $grid_navbar_height !important;
       color: inherit;
       background-color: inherit;
     }

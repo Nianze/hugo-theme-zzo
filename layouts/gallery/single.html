@@ -9,7 +9,7 @@
 {{ $root := . }}
 {{ if in (lower .Params.Mode) "one" }}
 <main class="gallery main">
-  <div class="grid single__contents">
+  <div class="grid gallery__container">
     <div class="grid-sizer"></div>
     {{ if .File.Dir }}
       {{ $basename := (replace .File.Dir "\\" "/") }}
@@ -24,14 +24,14 @@
       </div>
       {{ end }}
     {{ end }}
-  </div>  
+  </div>
   {{ partial "pagination/pagination-single" . }}
 </main>
 
 {{ else }}
 
 <main class="gallery main">
-  <div class="grid single__contents">
+  <div class="grid gallery__container">
     <div class="grid-sizer"></div>
     {{ if .File.Dir }}
       {{ $basename := (replace .File.Dir "\\" "/") }}

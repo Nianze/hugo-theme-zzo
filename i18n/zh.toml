@@ -46,6 +46,9 @@ other = "阅读"
 [donate-message]
 other = "您的鼓励是我最大的动力"
 
+[share-message]
+other = "分享"
+
 [contact-name]
 other = "姓名"
 
@@ -69,3 +72,9 @@ other = "更新日期"
 
 [tooltip-reading-time]
 other = "阅读时长"
+
+[showcase-overview]
+other = "总览"
+
+[showcase-pinned]
+other = "固定"

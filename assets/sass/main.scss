@@ -68,6 +68,9 @@ $cursive-font: {{ .Site.Data.font.cursive_font }};
 @import 'components/donation';
 @import 'components/box';
 @import 'components/modal';
+@import 'components/codetab';
+@import 'components/ie';
+@import 'components/tab';
 
 @import 'pages/404';
 @import 'pages/about';
@@ -78,3 +81,5 @@ $cursive-font: {{ .Site.Data.font.cursive_font }};
 @import 'pages/terms';
 @import 'pages/contact';
 @import 'pages/talk';
+@import 'pages/showcase';
+@import 'pages/wrapper';
