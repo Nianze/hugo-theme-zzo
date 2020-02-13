@@ -278,7 +278,8 @@ organization = "Hugo"
 link = "https://github.com/zzossig/hugo-theme-zzo"
 
 # sidebar
-enableBio = true # home page sidebar
+enableBio = true # in home page sidebar
+enableBioImage = true # in home page sidebar
 enableSidebar = true # Set to false to create the full width of the content.
 enableSidebarTags = true # if you want to use tags.
 enableSidebarSeries = true
@@ -292,6 +293,7 @@ tocFolding = false
 enableTocSwitch = true # single page table of contents visibility switch
 itemsPerCategory = 5 # maximum number of posts shown in the sidebar.
 sidebarPosition = "right" # bio, profile component layout position
+tocLevels = ["h2", "h3", "h4"] # minimum h2, maximum h4 in your article
 
 # footer
 showPoweredBy = true # show footer text: Powered by Hugo and Zzo theme
@@ -300,6 +302,7 @@ showSocialLinks = true # email, facebook, twitter ...
 enableLangChange = true # show button at bottom left of footer.
 
 # service
+googleTagManager = "" # GTM-XXXXXX
 baiduAnalytics = "" # alternative of google analytics
 enableBusuanzi = false # if set true, total page view, total unique visitors show up in the footer.
 busuanziSiteUV = true # unique visitors (total number of visitors)
@@ -404,6 +407,13 @@ commento = false
 [[share]]
   name = "twitter"
   username = ""
+
+[[footerLinks]]
+  name = ""
+  link = ""
+[[footerLinks]]
+  name = ""
+  link = ""
 ```
 
 ## Gallery
