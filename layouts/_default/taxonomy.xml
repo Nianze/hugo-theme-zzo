@@ -21,14 +21,7 @@
         {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
     {{ end }}
     
-    {{ if .IsHome }}
-      
-      {{ $filteredPages := .Site.RegularPages }}
-      {{ range $.Param "notAllowedTypesInHomeFeed" }}
-        {{ $filteredPages = (where $filteredPages "Type" "!=" (lower .)) }}
-      {{ end }}
-
-      {{ range $filteredPages }}
+    {{ range .Pages }}
       <item>
         <title>{{ .Title }}</title>
         <link>{{ .Permalink }}</link>
@@ -36,11 +29,8 @@
         {{ with .Site.Params.email }}<author>{{.}}{{ with $.Site.Params.myname }} ({{.}}){{end}}</author>{{end}}
         {{ with .Params.Lastmod }}<atom:modified>{{ .Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</atom:modified>{{end}}
         <guid>{{ .Permalink }}</guid>
-<<<<<<< HEAD
-        <description>{{ .Content | html }}</description>
-=======
         <description>{{ .Summary | html }}</description>
-        {{ if .Site.Params.fullContents }}<content:encoded>{{ .Content | html }}</content:encoded>{{end}}
+        {{ if .Site.Params.fullContents }}<content:encoded><![CDATA[{{ .Content | html }}]]></content:encoded>{{end}}
         {{ if .Params.author }}<dc:creator>{{ .Params.author }}</dc:creator>{{ else if .Site.Params.myname }}<dc:creator>{{ .Site.Params.myname }}</dc:creator>{{end}}
         {{ if .Params.image }}<media:content url="{{ .Site.BaseURL }}{{ .Params.image }}" medium="image"><media:title type="html">featured image</media:title></media:content>{{end}}
         {{ if .Params.featured_image }}<media:content url="{{ .Site.BaseURL }}image/{{ .Params.featured_image }}" medium="image"><media:title type="html">featured image</media:title></media:content>{{end}}
@@ -66,54 +56,7 @@
             {{ end }}
           {{ end }}
         {{ end }}
->>>>>>> upstream/master
       </item>
-      {{ end }}
-
-    {{ else }}
-
-      {{ range .Pages }}
-      <item>
-        <title>{{ .Title }}</title>
-        <link>{{ .Permalink }}</link>
-        <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
-        {{ with .Site.Params.email }}<author>{{.}}{{ with $.Site.Params.myname }} ({{.}}){{end}}</author>{{end}}
-        {{ with .Params.Lastmod }}<atom:modified>{{ .Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</atom:modified>{{end}}
-        <guid>{{ .Permalink }}</guid>
-<<<<<<< HEAD
-        <description>{{ .Content | html }}</description>
-=======
-        <description>{{ .Summary | html }}</description>
-        {{ if .Site.Params.fullContents }}<content:encoded>{{ .Content | html }}</content:encoded>{{end}}
-        {{ if .Params.author }}<dc:creator>{{ .Params.author }}</dc:creator>{{ else if .Site.Params.myname }}<dc:creator>{{ .Site.Params.myname }}</dc:creator>{{end}}
-        {{ if .Params.image }}<media:content url="{{ .Site.BaseURL }}{{ .Params.image }}" medium="image"><media:title type="html">featured image</media:title></media:content>{{end}}
-        {{ if .Params.featured_image }}<media:content url="{{ .Site.BaseURL }}image/{{ .Params.featured_image }}" medium="image"><media:title type="html">featured image</media:title></media:content>{{end}}
-        {{ if .Params.meta_image }}<media:content url="{{ .Site.BaseURL }}{{ .Params.meta_image }}" medium="image"><media:title type="html">meta image</media:title></media:content>{{end}}
-        {{ with .Params.tags }}
-          {{ range . }}
-            {{ with . }}
-              <category>{{.}}</category>
-            {{ end }}
-          {{ end }}
-        {{ end }}
-        {{ with .Params.categories }}
-          {{ range . }}
-            {{ with . }}
-              <category>{{.}}</category>
-            {{ end }}
-          {{ end }}
-        {{ end }}
-        {{ with .Params.series }}
-          {{ range . }}
-            {{ with . }}
-              <category>{{.}}</category>
-            {{ end }}
-          {{ end }}
-        {{ end }}
->>>>>>> upstream/master
-      </item>
-      {{ end }}
-
     {{ end }}
   </channel>
 </rss>
