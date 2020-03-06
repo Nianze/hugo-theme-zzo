@@ -252,6 +252,9 @@ notAllowedTypesInHomeFeed = ["about", "archive", "contact", "talks", "showcase",
 # header
 homeHeaderType = "text" # text, img, slide
 
+# menu
+showMobileMenuTerms = ["tags", "categories", "series"]
+
 # navbar
 enableThemeChange = true # site color theme
 
@@ -388,6 +391,8 @@ commento = false
   xmpp = ""
   dev-to = ""
   gitea = ""
+  google-scholar = ""
+  twitch = ""
 
 [donationOptions]
   enable = false # if set, the donation button will show up on the single page.

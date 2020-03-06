@@ -64,6 +64,12 @@
     padding: 0 0.125rem;
   }
 
+  &__nojs {
+    width: 100%;
+    color: red;
+    padding: 0.5rem 0;
+  }
+
   &__contents {
     &[data-ani="true"] {
       @include animation('slide-in-left-little .2s .6s 1 ease-in both');
@@ -255,6 +261,17 @@
     .language-code .copy-to-clipboard:hover {
       @include translateY(-0.1rem);
     }
+    .highlight > .copy-to-clipboard {
+      position: absolute;
+      right: 4px;
+      top: 5px;      
+      border-radius: 2px;
+      z-index: z('clipboard');
+      @include transition(all, 0.2s, ease);
+    }
+    .highlight > .copy-to-clipboard:hover {
+      @include translateY(-0.1rem);
+    }
 
     blockquote {
       font-size: 1.05rem;
@@ -339,6 +356,10 @@
         @include themify($codeblock) {
           color: themed('content-code-color');
         }
+      }
+
+      p {
+        margin-bottom: 0.5rem;
       }
     }
 
@@ -497,6 +518,16 @@ pre:not(.chroma) {
   }
 }
 
+.highlight {
+  position: relative;
+
+  @include on-event {
+    .copy-to-clipboard {
+      opacity: 1;
+    }
+  }
+}
+
 .highlight > .chroma {
   margin: 1em 0;
   border-radius: 5px;
@@ -504,6 +535,7 @@ pre:not(.chroma) {
   z-index: z('content');
   overflow-x: auto;
   direction: ltr;
+  position: relative;
 
   @include themify($codeblock) {
     color: themed('content-pre-color');
