@@ -3,9 +3,22 @@
 English | 
 [한국어](https://github.com/zzossig/hugo-theme-zzo/blob/master/README.ko.md)
 
-🔥🔥🔥🤓The minimum Hugo version changed to 0.60.0. This version changed the markdown rendering library, so if you are using an older version, it may not be compatible.🔥🔥🔥
+Minimum Hugo version changed to 0.65.0 to take advantage of new feature `.GetTerms`.
+This new feature enable asian languages correctly displayed.
+
+```html
+<ul>
+    {{ range (.GetTerms "tags") }}
+        <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+   {{ end }}
+</ul>
+```
 
 Thank you for click me!. Zzo theme is a blog theme powered by Hugo with free(always), and many features. 
+
+## Documentation
+
+[https://zzodocs.netlify.com/docs/](https://zzodocs.netlify.com/docs/)
 
 ## Table of contents
 
@@ -15,10 +28,10 @@ Thank you for click me!. Zzo theme is a blog theme powered by Hugo with free(alw
 * [Updating](#updating)
 * [Run example site](#run-example-site)
 * [Configuration](#configuration)
-* [Layout](#layout)
 * [Gallery](#gallery)
 * [Contact Page](#contact-page)
 * [Talks Page](#talks-page)
+* [Showcase Page](#showcase-page)
 * [Multi Language](#multi-language)
 * [Author](#author)
 * [Favicon](#favicon)
@@ -37,11 +50,12 @@ Thank you for click me!. Zzo theme is a blog theme powered by Hugo with free(alw
 * Search Engine Optimization(SEO)
 * Multilingual (i18n)
 * Responsive design
-* RSS and JSON feeds with full content
+* RSS
 * Search
 * Gallery
 * Fast code highlighting
-* Talks page for external links
+* Talks page
+* Showcase page
 
 ## Minimum Hugo version
 
@@ -219,12 +233,23 @@ description = "The Zzo theme for Hugo example site." # for SEO
 custom_css = [] # custom_css = ["scss/custom.scss"] and then make file at root/assets/scss/custom.scss
 custom_js = [] # custom_js = ["js/custom.js"] and then make file at root/assets/js/custom.js
 useFaviconGenerator = false # https://www.favicon-generator.org/
+languagedir = "ltr" # ltr / rtl
 
 themeOptions = ["dark", "light", "hacker", "solarized", "kimbie"] # select options for site color theme
-notAllowedTypesInHome = ["contact", "talks", "about"] # not allowed page types in home page. type can be set in front matter or default to folder name.
+notAllowedTypesInHome = ["contact", "talks", "about", "showcase"] # not allowed page types in home page. type can be set in front matter or default to folder name.
+notAllowedTypesInHomeSidebar = ["about", "archive", "showcase"] # not allowed page types in home page sidebar(recent post titles).
+notAllowedTypesInArchive = ["about", "talks", "showcase"] # not allowed page types in archive page
+notAllowedTypesInHomeFeed = ["about", "archive", "contact", "talks", "showcase", "publication", "presentation", "resume", "gallery"]
+
+viewportSize = "normal" # widest, wider, wide, normal, narrow
+enableUiAnimation = true
+hideSingleContentsWhenJSDisabled = false
 
 # header
 homeHeaderType = "text" # text, img, slide
+
+# menu
+showMobileMenuTerms = ["tags", "categories", "series"]
 
 # navbar
 enableThemeChange = true # site color theme
@@ -246,21 +271,30 @@ talksGroupByDate = "2006" # "2006-01": group by month, "2006": group by year
 myname = "zzossig"
 email = "zzossig@gmail.com"
 whoami = "Web Developer"
-useGravatar = false
+bioImageUrl = "" # image url like "http//..." or "images/anyfoldername/mybioimage.jpg" If not set, we find a avatar image in root/static/images/whoami/avatar.(png|jpg|svg)
+useGravatar = false # we use this option highest priority
 location = "Seoul, Korea"
 organization = "Hugo"
 link = "https://github.com/zzossig/hugo-theme-zzo"
 
 # sidebar
-enableBio = true # home page sidebar
+enableBio = true # in home page sidebar
+enableBioImage = true # in home page sidebar
 enableSidebar = true # Set to false to create the full width of the content.
 enableSidebarTags = true # if you want to use tags.
 enableSidebarSeries = true
 enableSidebarCategories = true
+enableHomeSidebarTitles = true
+enableListSidebarTitles = true
 enableToc = true # single page table of contents, you can replace this param to toc(toc = true)
 hideToc = false # Hide or Show toc
+tocPosition = "inner" # inner, outer
+tocFolding = false
 enableTocSwitch = true # single page table of contents visibility switch
 itemsPerCategory = 5 # maximum number of posts shown in the sidebar.
+sidebarPosition = "right" # bio, profile component layout position
+tocLevels = ["h2", "h3", "h4"] # minimum h2, maximum h4 in your article
+enableSidebarPostsByOrder = false # another lists in the sidebar
 
 # footer
 showPoweredBy = true # show footer text: Powered by Hugo and Zzo theme
@@ -269,6 +303,7 @@ showSocialLinks = true # email, facebook, twitter ...
 enableLangChange = true # show button at bottom left of footer.
 
 # service
+googleTagManager = "" # GTM-XXXXXX
 baiduAnalytics = "" # alternative of google analytics
 enableBusuanzi = false # if set true, total page view, total unique visitors show up in the footer.
 busuanziSiteUV = true # unique visitors (total number of visitors)
@@ -342,66 +377,46 @@ commento = false
   weibo = ""
   douban = ""
   csdn = ""
-  zhihu = ""
   gitlab = ""
   mastodon = ""
   jianshu = ""
+  zhihu = ""
+  signal = ""
+  whatsapp = ""
+  matrix = ""
+  xmpp = ""
+  dev-to = ""
+  gitea = ""
+  google-scholar = ""
+  twitch = ""
 
-[donationOptions] 
+[donationOptions]
   enable = false # if set, the donation button will show up on the single page.
   alipay = "" # Alipay QR Code image (example path: images/donation/alipay-qrcode.png) and put your file at root/static/images/donation/
   wechat = "" # Wechat pay QR Code image (example path: same as above)
   paypal = "" # Paypal URL
   patreon = "" # Patreon URL
+  bitcoin = "" # example path: images/donation/bitcoin-code-image.png
 
 [copyrightOptions]
   enableCopyrightLink = false # if set, you can add copyright link
   copyrightLink = ""
   copyrightLinkImage = ""
   copyrightLinkText = ""
-```
 
-## Layout
+# possible share name: "facebook","twitter", "reddit", "linkedin", "tumblr", "weibo", "douban", "line", "whatsapp", "telegram"
+[[share]]
+  name = "facebook"
+[[share]]
+  name = "twitter"
+  username = ""
 
-### CSS grid for layout
-
-Modern CSS grid is the easiest and cleanest way to layout your pages.
-
-The CSS grid layout are in `assets/sass/layout/_grid.scss`. A lot can be done by just reordering "grid-template-rows". 
-
-### grid structure
-
-|  left 	|  right 	|
-|---	|---	|
-|  1	|  2	|
-|  3 	|  4	|
-|  5 	|  6	|
-|  7 	|  8	|
-
-* left, right column width ratio => 5 : 2
-* 1 => .navbar-main
-* 2 => .navbar-side
-* 1 + 2 => .navbar
-* 3 => .header-main
-* 4 => .header-side
-* 3 + 4 => .header
-* 5 => .main-main
-* 6 => .main-side
-* 5 + 6 => .main
-* 7 => .footer-main
-* 8 => .footer-side
-* 7 + 8 => .footer
-
-### grid structure example applied in home page
-
-```html
-<div class="navbar"></div>
-<div class="header"></div>
-<div>
-  <div class="main-main"></div>
-  <div class="main-side"></div>
-</div>
-<div class="footer></div>
+[[footerLinks]]
+  name = ""
+  link = ""
+[[footerLinks]]
+  name = ""
+  link = ""
 ```
 
 ## Gallery
@@ -470,9 +485,9 @@ root
 
 ## Contact Page
 
-Currently available service: [formspree]. Open an issue if you need another service vendor.
+Currently available service: [formspree]. Open an issue if you need another service vendor. If you want just a blank page and use a markdown, set the service param empty.
 
-1. Make a file at root/contact/index.md
+1. Make a file at root/content/contact/index.md
 
 ```yaml
 ---
@@ -509,6 +524,7 @@ Talks page is a listing page of links(video, ppt, event, ...). UI is similar to 
 title: "Talks"
 date: 2019-12-30T11:14:14+09:00
 description: Talks Page
+titleWrap: wrap # wrap, nowrap
 ---
 ```
 
@@ -564,6 +580,60 @@ And we are good to go.
     ---
     ...
     ```
+
+## Showcase Page
+
+Showcase page is a listing page of project showcase. Follow the below steps to make it.
+
+1. Make a file at `root/content/showcase/_index.md`.
+
+```yaml
+---
+title: "Showcase overview" # For SEO
+date: 2020-01-19T15:43:38+09:00
+description: My portfolio, repos, works overview page # For SEO
+enableBio: true # Set to false if you want to hide the bio component.
+---
+```
+
+2. Make a category folder and a file at `root/content/showcase/hugo/_index.md`. (In my case, hugo is a category)
+
+```yaml
+---
+title: "Hugo" # category name
+date: 2020-01-19T21:04:11+09:00
+description: Hugo theme collection # For SEO
+category: theme # meta info appeared on a card bottom side. category in category
+enableBio: true
+---
+```
+
+3. Make a file per project.
+
+`root/content/showcase/hugo/my-awesome-project.md`.
+
+```yaml
+---
+title: "My Awesome Project" # apperared on a card component
+date: 2020-01-19T21:13:42+09:00
+description: Hello world! This is my awesome project! # apperared on a card component
+weight: 1 # card ordering
+link: https://github.com/zzossig/hugo-theme-zzo
+repo: https://github.com/zzossig/hugo-theme-zzo
+pinned: true # appreared on a overview page.
+thumb: feature3/css3.png # relative path in static/images
+---
+```
+
+4. Finally, make a menu at your root/config/_default/menus.en.toml file
+
+```toml
+[[main]]
+  identifier = "showcase"
+  name = "Showcase"
+  url = "showcase"
+  weight = 7
+```
 
 ## Multi Language
 
@@ -929,6 +999,7 @@ title:
 author: # author name
 authorEmoji: 🤖 # emoji for subtitle, summary meta data
 authorImage: "/images/whoami/avatar.jpg" # image path in the static folder
+authorImageUrl: "" # your image url. We use `authorImageUrl` first. If not set, we use `authorImage`.
 authorDesc: # author description
 socialOptions: # override params.toml file socialOptions
   email: ""
@@ -1000,8 +1071,8 @@ You can add some config option parameters at data/flowchartjs.json
 ### notice
 
 ```bash
-{{< notice note >}} # note, info, tip, warning
-A notice disclaimer
+{{< notice success >}} # success, info, warning, error
+success
 {{< /notice >}}
 ```
 
@@ -1015,6 +1086,63 @@ A notice disclaimer
 
 ```bash
 {{< box >}}
-Some markdown contents
+Some contents
 {{< /box >}}
 ```
+
+### boxmd
+
+```bash
+{{< boxmd >}}
+Some markdown contents
+{{< /boxmd >}}
+```
+
+### code / codes => Tabbed code-block. indentation matters.
+
+`````
+{{< codes java javascript >}}
+  {{< code >}}
+  ```java
+  System.out.println('Hello World!');
+  ```
+  {{< /code >}}
+  {{< code >}}
+  ```javascript
+  console.log('Hello World!');
+  ```
+  {{< /code >}}
+{{< /codes >}}
+`````
+
+### tab / tabs => Tabs make it easy to explore and switch between different views
+
+⚠️Becareful that the content in the tab should be different from each other.
+The tab makes unique id hashes depending on the tab contents.
+So, If you just copy-paste the tabs with multiple times, since it has the same contents, the tab will not work.
+
+`````
+{{< tabs Windows MacOS Ubuntu >}}
+  {{< tab >}}
+
+  ### Windows section
+
+  ```javascript
+  console.log('Hello World!');
+  ```
+
+  {{< /tab >}}
+  {{< tab >}}
+
+  ### MacOS section
+
+  Hello world!
+  {{< /tab >}}
+  {{< tab >}}
+
+  ### Ubuntu section
+
+  Great!
+  {{< /tab >}}
+{{< /tabs >}}
+`````

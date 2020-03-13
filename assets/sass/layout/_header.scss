@@ -10,6 +10,10 @@
   @include justify-content(center);
   @include flex-direction(column);
 
+  &[data-ani="true"] {
+    @include animation('fade-in .15s .1s 1 ease-in both');
+  }
+
   &__title {
     line-height: 1.1;
     font-weight: 700;
