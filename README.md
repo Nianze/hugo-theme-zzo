@@ -3,18 +3,37 @@
 English | 
 [한국어](https://github.com/zzossig/hugo-theme-zzo/blob/master/README.ko.md)
 
-Minimum Hugo version changed to 0.65.0 to take advantage of new feature `.GetTerms`.
-This new feature enable asian languages correctly displayed.
+2020-07-24 new feature - [type writer in home header]
 
-```html
-<ul>
-    {{ range (.GetTerms "tags") }}
-        <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
-   {{ end }}
-</ul>
+I added new home header option. Now, we have 5 options - empty, text, image, slider and typewriter
+Follow the below steps to apply it
+
+0. Update the theme first.
+1. Edit `homeHeaderType` param to `typewriter` in params.toml file.
+2. Insert below code to your header md file.
+```yaml
+header:
+  - type: typewriter
+    methods:
+      - typeString: Hello world!
+      - pauseFor: 2500
+      - deleteAll: true
+      - typeString: Strings can be removed
+      - pauseFor: 2500
+      - deleteChars: 7
+      - typeString: <strong>altered!</strong>
+      - pauseFor: 2500
+    options:
+      loop: true
+      autoStart: false
+    height: 190
+    paddingX: 50
+    align: center
+    fontSize: 44
+    fontColor: yellow
+  ...
 ```
-
-Thank you for click me!. Zzo theme is a blog theme powered by Hugo with free(always), and many features. 
+3. Refer this site https://safi.me.uk/typewriterjs/ and edit the params.
 
 ## Documentation
 
@@ -240,13 +259,15 @@ notAllowedTypesInHome = ["contact", "talks", "about", "showcase"] # not allowed 
 notAllowedTypesInHomeSidebar = ["about", "archive", "showcase"] # not allowed page types in home page sidebar(recent post titles).
 notAllowedTypesInArchive = ["about", "talks", "showcase"] # not allowed page types in archive page
 notAllowedTypesInHomeFeed = ["about", "archive", "contact", "talks", "showcase", "publication", "presentation", "resume", "gallery"]
+enablePinnedPosts = true # show pinned posts first in the main view
 
 viewportSize = "normal" # widest, wider, wide, normal, narrow
 enableUiAnimation = true
 hideSingleContentsWhenJSDisabled = false
+minItemsToShowInTagCloud = 1 # Minimum items to show in tag cloud
 
 # header
-homeHeaderType = "text" # text, img, slide
+homeHeaderType = "text" # text, img, slide, typewriter
 
 # menu
 showMobileMenuTerms = ["tags", "categories", "series"]
@@ -324,6 +345,8 @@ commento = false
 [utterances]       # https://utteranc.es/
   owner = ""              # Your GitHub ID
   repo = ""               # The repo to store comments
+  message = ""      # Optional
+  link = ""         # Optional
 
 [gitalk]           # Gitalk is a comment system based on GitHub issues. see https://github.com/gitalk/gitalk
   owner = ""              # Your GitHub ID
@@ -779,7 +802,7 @@ Make sure that !important is necessary. After you changed this param, restart hu
 
 ### custom header
 
-You may want to change home page header. There are 4 options which is slider, image, text, empty.
+You may want to change home page header. There are 5 options which is slider, image, text, typewriter, empty.
 
 1. Set param at config/_default/params.toml(homeHeaderType)
 
@@ -788,6 +811,25 @@ You may want to change home page header. There are 4 options which is slider, im
 ```yaml
 ---
 header:
+- type: typewriter
+    methods:
+      - typeString: Hello world!
+      - pauseFor: 2500
+      - deleteAll: true
+      - typeString: Strings can be removed
+      - pauseFor: 2500
+      - deleteChars: 7
+      - typeString: <strong>altered!</strong>
+      - pauseFor: 2500
+    options:
+      loop: true
+      autoStart: false
+    height: 190
+    paddingX: 50
+    align: center
+    fontSize: 44
+    fontColor: yellow
+
   - type: text
     height: 200
     paddingX: 50
