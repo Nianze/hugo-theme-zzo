@@ -29,6 +29,7 @@
             {{ block "main" . }}{{ end }}
             {{ partial "body/custom-body" . }}
             {{ partial "footer/site-footer" . }}
+            {{ block "footer" . }}{{ end }}
         </div>
         {{ partial "body/main-right" . }}
     </div>
