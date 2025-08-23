@@ -187,7 +187,13 @@
     
     if (enableBusuanzi && busuanziPagePV) {
       var pagePvElem = document.querySelector('#busuanzi_value_page_pv');
-      pagePvElem.textContent = pagePvElem.textContent.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+      if (pagePvElem) {
+        // Check if busuanzi has loaded a value
+        if (pagePvElem.textContent !== '...' && pagePvElem.textContent !== 'Loading...' && pagePvElem.textContent !== 'N/A') {
+          // Format the number with commas
+          pagePvElem.textContent = pagePvElem.textContent.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+        }
+      }
     }    
     // =================================================================
 
