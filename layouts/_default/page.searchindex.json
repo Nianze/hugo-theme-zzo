@@ -1,0 +1,14 @@
+{
+  "title": "{{ .Title }}",
+  "content": {{ .Content | plainify | jsonify }},
+  "summary": {{ .Summary | plainify | jsonify }},
+  "date": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+  "lastmod": "{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
+  "permalink": "{{ .Permalink }}",
+  "type": "{{ .Type }}",
+  "kind": "{{ .Kind }}",
+  "section": "{{ .Section }}",
+  "tags": {{ .Params.tags | jsonify }},
+  "categories": {{ .Params.categories | jsonify }},
+  "series": {{ .Params.series | jsonify }}
+}

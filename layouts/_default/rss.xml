@@ -21,7 +21,7 @@
         {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
     {{ end }}
     
-    {{- $limit := .Site.Config.Services.RSS.Limit -}}
+    {{- $limit := .Site.Params.rssLimit | default 100 -}}
 
     {{ if .IsHome }}
       
