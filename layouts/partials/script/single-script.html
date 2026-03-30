@@ -1,6 +1,6 @@
-{{ $js := .Site.Data.lib.js }}
-{{ $css := .Site.Data.lib.css }}
-{{ $d3 := .Site.Data.lib.d3 }}
+{{ $js := hugo.Data.lib.js }}
+{{ $css := hugo.Data.lib.css }}
+{{ $d3 := hugo.Data.lib.d3 }}
 
 {{ $getParents := resources.Get "js/helper/getParents.js" | resources.Minify }}
 <script defer src="{{ $getParents.RelPermalink }}"></script>
@@ -475,7 +475,7 @@
 
     // ========================= flowchart.js ==========================
     if (lib && lib.includes('flowchartjs')) {
-      {{ $flowchartjs := .Site.Data.flowchartjs }}
+      {{ $flowchartjs := hugo.Data.flowchartjs }}
       var options = JSON.parse({{ $flowchartjs | jsonify }});
       var jsonContent = null;
 
@@ -510,7 +510,7 @@
 
     // ====================== js-sequence-diagram ======================
     if (lib && lib.includes('msc')) {
-      {{ $msc := .Site.Data.msc }}
+      {{ $msc := hugo.Data.msc }}
       var options = JSON.parse({{ $msc | jsonify }});
       var jsonContent = null;
 
